@@ -38,8 +38,6 @@
 			## Grab the data
 			$sql_data  = $dump->export('tbl_%', MySQLDump::ALL);
 			
-			$sql_data = str_replace('`' . Administration::instance()->Configuration->get('tbl_prefix', 'database'), '`tbl_', $sql_data);
-			
 			header('Content-type: text/plain');	
 			header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 			header("Content-Disposition: Attachment; filename=install.sql");
