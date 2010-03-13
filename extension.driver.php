@@ -40,7 +40,7 @@
 			
 			header('Content-type: text/plain');	
 			header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-			header("Content-Disposition: Attachment; filename=install.sql");
+			header("Content-Disposition: Attachment; filename=dump.sql");
 			
 		    echo $sql_data;
 			exit();
