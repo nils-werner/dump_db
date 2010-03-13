@@ -19,7 +19,6 @@
 							'delegate' => 'AddCustomPreferenceFieldsets',
 							'callback' => 'appendPreferences'
 						),
-
 					);
 		}
 		
@@ -35,8 +34,21 @@
 			
 			$dump = new MySQLDump(Symphony::Database());
 			
-			## Grab the data
-			$sql_data  = $dump->export('tbl_%', MySQLDump::ALL);
+			$rows = Symphony::Database()->fetch("SHOW TABLES LIKE 'tbl_%';");
+			
+			$rows = array_map (create_function ('$x', 'return array_values ($x);'), $rows);
+			$tables = array_map (create_function ('$x', 'return $x[0];'), $rows);
+			
+			foreach ($tables as $table){
+				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
+				
+				if($table == "tbl_cache" || $table == "tbl_sessions") { ## Grab the structure for cache and sessions
+					$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);
+				}
+				else { ## Grab the data for everything else
+					$sql_data .= $dump->export($table, MySQLDump::ALL);
+				}
+			}
 			
 			header('Content-type: text/plain');	
 			header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
