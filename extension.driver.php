@@ -4,7 +4,7 @@
 
 		public function about(){
 			return array('name' => 'Dump DB',
-						 'version' => '1.00',
+						 'version' => '1.01',
 						 'release-date' => '2010-03-13',
 						 'author' => array('name' => 'Nils Werner',
 										   'website' => 'http://www.phoque.de',

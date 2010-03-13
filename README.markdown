@@ -2,7 +2,7 @@
 
 This extension exports your Symphony database
 
-- Version: 1.00
+- Version: 1.01
 - Date: 13th Mar 2010
 - Requirements: Symphony 2.0.7RC2 or above
 - Author: Nils Werner, nils.werner@gmail.com
@@ -22,4 +22,8 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 **Version 1.00**
 
-- Initial release. Mainly a copy of Alistairs Export Ensemble
+- Initial release. Mainly a copy of Alistairs Export Ensemble.
+
+**Version 1.01**
+
+- Prevented dumping data of `cache` and `sessions` tables.
