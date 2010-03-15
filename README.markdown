@@ -2,7 +2,7 @@
 
 This extension exports your Symphony database
 
-- Version: 1.01
+- Version: 1.02
 - Date: 13th Mar 2010
 - Requirements: Symphony 2.0.7RC2 or above
 - Author: Nils Werner, nils.werner@gmail.com
@@ -27,3 +27,7 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 **Version 1.01**
 
 - Prevented dumping data of `cache` and `sessions` tables.
+
+**Version 1.02**
+
+- Dump is now being saved into /workspace/dump.sql instead of offered for download.
