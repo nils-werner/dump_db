@@ -19,10 +19,10 @@
 	$dictionary = array(
 
 		'Dump Database' =>
-		'Datenbank herunterladen',
+		'Datenbank sichern',
 
 		'Dump' =>
-		'Auslesen',
+		'Sichern',
 
 		'Packages entire database into <code>/workspace/dump.sql</code>.' =>
 		'Speichert die gesamte Datenbank in <code>/workspace/dump.sql</code>.',
