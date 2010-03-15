@@ -50,12 +50,12 @@
 				}
 			}
 			
-			header('Content-type: text/plain');	
-			header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-			header("Content-Disposition: Attachment; filename=dump.sql");
-			
-		    echo $sql_data;
-			exit();
+		    if(FALSE !== file_put_contents(DOCROOT . '/workspace/dump.sql', $sql_data)) {
+				Administration::instance()->Page->pageAlert(__('Database successfully dumped into <code>/workspace/dump.sql</code>.'), Alert::SUCCESS);
+			}
+			else {
+				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>/workspace/dump.sql</code>.'), Alert::ERROR);
+			}
 			
 		}
 
@@ -81,7 +81,7 @@
 			
 			$div->appendChild($span);
 
-			$div->appendChild(new XMLElement('p', __('Packages entire database into a <code>.sql</code> file for download.'), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages entire database into <code>/workspace/dump.sql</code>.'), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);

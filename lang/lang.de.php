@@ -24,8 +24,16 @@
 		'Dump' =>
 		'Auslesen',
 
-		'Packages entire database into a <code>.sql</code> file for download.' =>
-		'Stellt die gesamte Datenbank als <code>SQL</code>-Datei zur Verfügung.',
+		'Packages entire database into <code>/workspace/dump.sql</code>.' =>
+		'Speichert die gesamte Datenbank in <code>/workspace/dump.sql</code>.',
+		
+		
+		'An error occurred while trying to write <code>/workspace/dump.sql</code>.' =>
+		'Ein Fehler ist beim Schreiben von <code>/workspace/dump.sql</code> aufgetreten.',
+		
+		
+		'Database successfully dumped into <code>/workspace/dump.sql</code>.' =>
+		'Datenbank wurde erfolgreich in <code>/workspace/dump.sql</code> gespeichert.',
 
 	);
 	
