@@ -24,16 +24,19 @@
 		'Dump' =>
 		'Sichern',
 
-		'Packages entire database into <code>/workspace/dump.sql</code>.' =>
-		'Speichert die gesamte Datenbank in <code>/workspace/dump.sql</code>.',
+		'Packages entire database into <code>/workspace/dump-%s.sql</code>.' =>
+		'Speichert die gesamte Datenbank in <code>/workspace/dump-%s.sql</code>.',
 		
 		
-		'An error occurred while trying to write <code>/workspace/dump.sql</code>.' =>
-		'Ein Fehler ist beim Schreiben von <code>/workspace/dump.sql</code> aufgetreten.',
+		'An error occurred while trying to write <code>/workspace/dump-%s.sql</code>.' =>
+		'Ein Fehler ist beim Schreiben von <code>/workspace/dump-%s.sql</code> aufgetreten.',
 		
 		
-		'Database successfully dumped into <code>/workspace/dump.sql</code>.' =>
-		'Datenbank wurde erfolgreich in <code>/workspace/dump.sql</code> gespeichert.',
+		'Database successfully dumped into <code>/workspace/dump-%s.sql</code>.' =>
+		'Datenbank wurde erfolgreich in <code>/workspace/dump-%s.sql</code> gespeichert.',
+		
+		'random-hash' =>
+		'zufälliger-hash'
 
 	);
 	
