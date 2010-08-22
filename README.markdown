@@ -2,9 +2,9 @@
 
 This extension exports your Symphony database
 
-- Version: 1.02
-- Date: 13th Mar 2010
-- Requirements: Symphony 2.0.7RC2 or above
+- Version: 1.03
+- Date: 22nd August 2010
+- Requirements: Symphony 2.0.7 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/phoque/dump_db/commits/master)
 - GitHub Repository: <http://github.com/phoque/dump_db>
@@ -19,7 +19,6 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 ## Change Log
 
-
 **Version 1.00**
 
 - Initial release. Mainly a copy of Alistairs Export Ensemble.
@@ -31,3 +30,7 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 **Version 1.02**
 
 - Dump is now being saved into /workspace/dump.sql instead of offered for download.
+
+**Version 1.03**
+
+- Dump-file will now have a random hash in its filename for security reasons.
