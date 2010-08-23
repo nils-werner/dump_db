@@ -24,8 +24,8 @@
 		'Dump' =>
 		'Sichern',
 
-		'Packages entire database into <code>/workspace/dump-%s.sql</code>.' =>
-		'Speichert die gesamte Datenbank in <code>/workspace/dump-%s.sql</code>.',
+		'Packages your database into <code>/workspace/dump-%s.sql</code>.' =>
+		'Speichert die Datenbank in <code>/workspace/dump-%s.sql</code>.',
 		
 		
 		'An error occurred while trying to write <code>/workspace/dump-%s.sql</code>.' =>
@@ -36,7 +36,13 @@
 		'Datenbank wurde erfolgreich in <code>/workspace/dump-%s.sql</code> gespeichert.',
 		
 		'random-hash' =>
-		'zufälliger-hash'
+		'zufälliger-hash',
+		
+		'Save author information' =>
+		'Benutzer sichern',
+		
+		'Unchecking this box will prevent your dump from dumping any author data.' =>
+		'Das abwählen dieses Häkchens hindert die Sicherung daran, Autoren-Daten zu speichern.'
 
 	);
 	

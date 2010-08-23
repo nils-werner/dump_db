@@ -31,7 +31,7 @@
 				Administration::instance()->saveConfig();
 		}
 		
-		private function __dump(){
+		private function __dump($context){
 			$sql_schema = $sql_data = NULL;
 			
 			$hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
@@ -45,8 +45,14 @@
 			$rows = array_map (create_function ('$x', 'return array_values ($x);'), $rows);
 			$tables = array_map (create_function ('$x', 'return $x[0];'), $rows);
 			
+			$users = ($_POST['settings']['dump_db']['users'] == 'yes')? true : false;
+			
 			foreach ($tables as $table){
 				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
+				
+				if(!$users && ($table == "tbl_authors" || $table == "tbl_forgotpass")) {
+					continue;
+				}
 				
 				if($table == "tbl_cache" || $table == "tbl_sessions") { ## Grab the structure for cache and sessions
 					$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);
@@ -66,7 +72,7 @@
 		}
 
 		public function __SavePreferences($context){			
-			$this->__dump();
+			$this->__dump($context);
 		}
 		
 		public function appendPreferences($context){
@@ -86,17 +92,24 @@
 			$group->appendChild(new XMLElement('legend', __('Dump Database')));			
 			
 
-			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));			
-			$span = new XMLElement('span');
+			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
 			
-			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));	
+			$label = new XMLElement('label', NULL);
+			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes', 'checked' => 'checked'));
+			$label->setValue($checkbox->generate() . ' ' .__('Save author information'));
+			$div->appendChild($label);
+			
+			$div->appendChild(new XMLElement('p', __('Unchecking this box will prevent your dump from dumping any author data.'), array('class' => 'help')));	
+			
+			$span = new XMLElement('span');
+			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
 			
 			$div->appendChild($span);
 			
 			if($hash == "")
 				$hash = "<em>" . __("random-hash") . "</em>";
 
-			$div->appendChild(new XMLElement('p', __('Packages entire database into <code>/workspace/dump-%s.sql</code>.',array($hash)), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages your database into <code>/workspace/dump-%s.sql</code>.',array($hash)), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
