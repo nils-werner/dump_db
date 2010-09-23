@@ -7,7 +7,7 @@
 			'email' => 'nils.werner@gmail.com',
 			'website' => 'http://www.phoque.de'
 		),
-		'release-date' => '2010-03-13'
+		'release-date' => '2010-09-23'
 	);
 	
 	
