@@ -37,8 +37,30 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 **Version 1.04**
 
-- New Config parameters `path` and `format`.  
-  Path lets you define a destination other than `/workspace/`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.  
-  Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the hash, `%2$s` the placeholder for the timestamp. You will see the final filename before running the dump in the backend.   
-  The default path is `/workspace`  
-  The default format is `dump-%1$s.sql`
+- New Config parameters `path` and `format`.
+
+## Config
+
+Path lets you define a destination other than `/workspace`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.
+  
+Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the hash, `%2$s` the placeholder for the timestamp. You will see the final filename before running the dump in the backend.
+  
+The default path is `/workspace`, the default format is `dump-%1$s.sql`
+  
+For example (this will place the file outside your installation-directory):
+  
+		###### DUMP_DB ######
+		'dump_db' => array(
+			'hash' => '9081f7300b82a135e0c5efa21b00cf1c',
+			'format' => 'dump-%1$s.sql',
+			'path' => '../sql'
+		),
+		########
+		
+These config-parameters enable you to:
+  
+ - Share the hash with your collaborators. That way everybody will commit to the same file.
+ - Append a timestamp to your filenames. That way you will be able to go back to older versions of the database.
+ - Move the file outside your publicly accessible directories.
+  
+Any mixture of the options above is possible.
