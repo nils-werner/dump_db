@@ -4,8 +4,8 @@
 
 		public function about(){
 			return array('name' => 'Dump DB',
-						 'version' => '1.03',
-						 'release-date' => '2010-08-22',
+						 'version' => '1.04',
+						 'release-date' => '2010-09-23',
 						 'author' => array('name' => 'Nils Werner',
 										   'website' => 'http://www.phoque.de',
 										   'email' => 'nils.werner@gmail.com')
@@ -34,7 +34,8 @@
 		private function __dump($context){
 			$sql_schema = $sql_data = NULL;
 			
-			$hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
+			list($hash, $path, $format) = $this->getConfig();
+			$filename = $this->generateFilename($hash, $format);
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqldump.php');
 			
@@ -62,11 +63,11 @@
 				}
 			}
 			
-		    if(FALSE !== file_put_contents(DOCROOT . '/workspace/dump-' . $hash . '.sql', $sql_data)) {
-				Administration::instance()->Page->pageAlert(__('Database successfully dumped into <code>/workspace/dump-%s.sql</code>.',array($hash)), Alert::SUCCESS);
+		    if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
+				Administration::instance()->Page->pageAlert(__('Database successfully dumped into <code>%s/%s</code>.',array($path,$filename)), Alert::SUCCESS);
 			}
 			else {
-				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>/workspace/dump-%s.sql</code>.',array($hash)), Alert::ERROR);
+				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
 			}
 			
 		}
@@ -76,12 +77,12 @@
 		}
 		
 		public function appendPreferences($context){
-			$hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
-			if($hash == "") {
-				$hash = md5(microtime());
-				Administration::instance()->Configuration->set('hash', $hash ,'dump_db');
-				Administration::instance()->saveConfig();
-			}
+			list($hash, $path, $format) = $this->getConfig();
+			
+			if($hash == "")
+				$hash = "<em>" . __("random-hash") . "</em>";
+			
+			$filename = $this->generateFilename($hash, $format);
 			
 			if(isset($_POST['action']['dump'])){
 				$this->__SavePreferences($context);
@@ -105,14 +106,35 @@
 			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
 			
 			$div->appendChild($span);
-			
-			if($hash == "")
-				$hash = "<em>" . __("random-hash") . "</em>";
 
-			$div->appendChild(new XMLElement('p', __('Packages your database into <code>/workspace/dump-%s.sql</code>.',array($hash)), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages your database into <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
 						
+		}
+		
+		private function getConfig() {
+			$path = General::Sanitize(Administration::instance()->Configuration->get('path', 'dump_db'));
+			$hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
+			$format = General::Sanitize(Administration::instance()->Configuration->get('format', 'dump_db'));
+			
+			if($format == "")
+				$format = 'dump-%1$s.sql';
+			
+			if($path == "")
+				$path = "/workspace";
+			
+			if($hash == "") {
+				$hash = md5(microtime());
+				Administration::instance()->Configuration->set('hash', $hash ,'dump_db');
+				Administration::instance()->saveConfig();
+			}
+			
+			return array($hash, $path, $format);
+		}
+		
+		private function generateFilename($hash, $format) {
+			return sprintf($format,$hash,date("YmdHi"));
 		}
 	}

@@ -2,8 +2,8 @@
 
 This extension exports your Symphony database
 
-- Version: 1.03
-- Date: 22nd August 2010
+- Version: 1.04
+- Date: 23nd September 2010
 - Requirements: Symphony 2.0.7 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/phoque/dump_db/commits/master)
@@ -34,3 +34,11 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 **Version 1.03**
 
 - Dump-file will now have a random hash in its filename for security reasons.
+
+**Version 1.04**
+
+- New Config parameters 'path' and 'format'.
+  Path lets you define a destination other than /workspace/, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant DOCROOT, it must begin with a slash and must not end with one.
+  Format lets you define a custom file naming scheme. '%1$s' is the placeholder for the hash, '%2$s' the placeholder for the timestamp. 
+  The default path is '/workspace'
+  The default format is 'dump-%1$s.sql'
