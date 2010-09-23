@@ -37,16 +37,8 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 **Version 1.04**
 
-<<<<<<< HEAD
 - New Config parameters `path` and `format`.  
   Path lets you define a destination other than `/workspace/`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.  
   Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the hash, `%2$s` the placeholder for the timestamp. You will see the final filename before running the dump in the backend.   
   The default path is `/workspace`  
   The default format is `dump-%1$s.sql`
-=======
-- New Config parameters 'path' and 'format'.
-  Path lets you define a destination other than /workspace/, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant DOCROOT, it must begin with a slash and must not end with one.  
-  Format lets you define a custom file naming scheme. '%1$s' is the placeholder for the hash, '%2$s' the placeholder for the timestamp.   
-  The default path is '/workspace'  
-  The default format is 'dump-%1$s.sql'
->>>>>>> 216597b52bf71f0b0f3a51b6d31a43d9510e85c9
