@@ -2,7 +2,7 @@
 
 This extension exports your Symphony database
 
-- Version: 1.04
+- Version: 1.05
 - Date: 23nd September 2010
 - Requirements: Symphony 2.0.7 or above
 - Author: Nils Werner, nils.werner@gmail.com
@@ -39,6 +39,12 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 - New Config parameters `path` and `format`.
 
+**Version 1.05**
+
+- New function to restore database from dump.
+  Be advised that this should never be used in a production environment as the procedure to extract the queries from the dump may be prone to errors.
+  To enable this feature you need to activate it manually in your config file.
+
 ## Config
 
 Path lets you define a destination other than `/workspace`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.
@@ -64,3 +70,7 @@ These config-parameters enable you to:
  - Move the file outside your publicly accessible directories.
   
 Any mixture of the options above is possible.
+
+To enable the restore-feature you need to do so manually using the following line in your array:
+
+		'restore' => 'yes'
