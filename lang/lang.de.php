@@ -7,7 +7,7 @@
 			'email' => 'nils.werner@gmail.com',
 			'website' => 'http://www.phoque.de'
 		),
-		'release-date' => '2010-09-23'
+		'release-date' => '2010-03-13'
 	);
 	
 	
@@ -23,9 +23,12 @@
 
 		'Dump' =>
 		'Sichern',
+		
+		'Restore' =>
+		'Wiederherstellen',
 
-		'Packages your database into <code>%s/%s</code>.' =>
-		'Speichert die Datenbank in <code>%s/%s</code>.',
+		'Packages and restores your database into and from <code>%s/%s</code>.' =>
+		'Speichert und stellt die Datenbank wieder her in/aus <code>%s/%s</code>.',
 		
 		
 		'An error occurred while trying to write <code>%s/%s</code>.' =>
@@ -42,7 +45,10 @@
 		'Benutzer sichern',
 		
 		'Unchecking this box will prevent your dump from dumping any author data.' =>
-		'Das abwählen dieses Häkchens hindert die Sicherung daran, Autoren-Daten zu speichern.'
+		'Das abwählen dieses Häkchens hindert die Sicherung daran, Autoren-Daten zu speichern.',
+		
+		'Do you really want to restore the database from the file?' =>
+		'Wollen Sie wirklich die Datenbank aus der Datei wiederherstellen?'
 
 	);
 	

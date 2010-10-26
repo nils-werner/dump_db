@@ -19,6 +19,11 @@
 							'delegate' => 'AddCustomPreferenceFieldsets',
 							'callback' => 'appendPreferences'
 						),
+						array(
+							'page'		=> '/backend/',
+							'delegate'	=> 'InitaliseAdminPageHead',
+							'callback'	=> 'initaliseAdminPageHead'
+						)
 					);
 		}
 		
@@ -29,6 +34,12 @@
 		public function uninstall(){
 				Administration::instance()->Configuration->remove('dump_db');            
 				Administration::instance()->saveConfig();
+		}
+		
+		public function initaliseAdminPageHead($context) {
+			$page = $context['parent']->Page;
+			
+			$page->addScriptToHead(URL . '/extensions/dump_db/assets/script.js', 3134);
 		}
 		
 		private function __dump($context){
@@ -104,10 +115,11 @@
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
+			$span->appendChild(new XMLElement('button', __('Restore'), array('name' => 'action[restore]', 'type' => 'submit')));
 			
 			$div->appendChild($span);
 
-			$div->appendChild(new XMLElement('p', __('Packages your database into <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages and restores your database into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
