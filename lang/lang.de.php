@@ -48,7 +48,13 @@
 		'Das abwählen dieses Häkchens hindert die Sicherung daran, Autoren-Daten zu speichern.',
 		
 		'Do you really want to restore the database from the file?' =>
-		'Wollen Sie wirklich die Datenbank aus der Datei wiederherstellen?'
+		'Wollen Sie wirklich die Datenbank aus der Datei wiederherstellen?',
+		
+		'Database successfully restored from <code>%s/%s</code> in %d queries.' =>
+		'Datenbank erfolgreich aus <code>%s/%s</code> mittels %d Abfragen wiederhergestellt.',
+		
+		'An error occurred while trying to import from <code>%s/%s</code>.' =>
+		'Ein Fehler ist bei der Wiederherstellung der Datenbank aus <code>%s/%s</code> aufgetreten.',
 
 	);
 	

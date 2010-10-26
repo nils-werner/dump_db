@@ -42,6 +42,72 @@
 			$page->addScriptToHead(URL . '/extensions/dump_db/assets/script.js', 3134);
 		}
 		
+		public function appendPreferences($context){
+			list($hash, $path, $format) = $this->getConfig();
+			
+			if($hash == "")
+				$hash = "<em>" . __("random-hash") . "</em>";
+			
+			$filename = $this->generateFilename($hash, $format);
+			
+			if(isset($_POST['action']['dump'])){
+				$this->__dump($context);
+			}
+			
+			if(isset($_POST['action']['restore'])){
+				$this->__restore($context);
+			}
+			
+			$group = new XMLElement('fieldset');
+			$group->setAttribute('class', 'settings');
+			$group->appendChild(new XMLElement('legend', __('Dump Database')));			
+			
+
+			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
+			
+			$label = new XMLElement('label', NULL);
+			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes', 'checked' => 'checked'));
+			$label->setValue($checkbox->generate() . ' ' .__('Save author information'));
+			$div->appendChild($label);
+			
+			$div->appendChild(new XMLElement('p', __('Unchecking this box will prevent your dump from dumping any author data.'), array('class' => 'help')));	
+			
+			$span = new XMLElement('span');
+			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
+			if(Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes') {
+				$span->appendChild(new XMLElement('button', __('Restore'), array('name' => 'action[restore]', 'type' => 'submit')));
+			}
+			
+			$div->appendChild($span);
+
+			$div->appendChild(new XMLElement('p', __('Packages and restores your database into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
+
+			$group->appendChild($div);						
+			$context['wrapper']->appendChild($group);
+						
+		}
+		
+		private function __restore($context){
+			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes')  // make sure the user knows what he's doing
+				return;
+			
+			list($hash, $path, $format) = $this->getConfig();
+			$filename = $this->generateFilename($hash, $format);
+			
+			require_once(dirname(__FILE__) . '/lib/class.mysqlrestore.php');
+			
+			$restore = new MySQLRestore(Symphony::Database());
+			
+			$return = $restore->import(file_get_contents(DOCROOT . $path . '/' . $filename));
+			
+		    if(FALSE !== $return) {
+				Administration::instance()->Page->pageAlert(__('Database successfully restored from <code>%s/%s</code> in %d queries.',array($path,$filename,$return)), Alert::SUCCESS);
+			}
+			else {
+				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
+			}
+		}
+		
 		private function __dump($context){
 			$sql_schema = $sql_data = NULL;
 			
@@ -81,45 +147,6 @@
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
 			}
 			
-		}
-		
-		public function appendPreferences($context){
-			list($hash, $path, $format) = $this->getConfig();
-			
-			if($hash == "")
-				$hash = "<em>" . __("random-hash") . "</em>";
-			
-			$filename = $this->generateFilename($hash, $format);
-			
-			if(isset($_POST['action']['dump'])){
-				$this->__dump($context);
-			}
-			
-			$group = new XMLElement('fieldset');
-			$group->setAttribute('class', 'settings');
-			$group->appendChild(new XMLElement('legend', __('Dump Database')));			
-			
-
-			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
-			
-			$label = new XMLElement('label', NULL);
-			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes', 'checked' => 'checked'));
-			$label->setValue($checkbox->generate() . ' ' .__('Save author information'));
-			$div->appendChild($label);
-			
-			$div->appendChild(new XMLElement('p', __('Unchecking this box will prevent your dump from dumping any author data.'), array('class' => 'help')));	
-			
-			$span = new XMLElement('span');
-			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
-			$span->appendChild(new XMLElement('button', __('Restore'), array('name' => 'action[restore]', 'type' => 'submit')));
-			
-			$div->appendChild($span);
-
-			$div->appendChild(new XMLElement('p', __('Packages and restores your database into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
-
-			$group->appendChild($div);						
-			$context['wrapper']->appendChild($group);
-						
 		}
 		
 		private function getConfig() {
