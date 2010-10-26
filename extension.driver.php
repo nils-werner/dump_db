@@ -82,10 +82,6 @@
 			}
 			
 		}
-
-		public function __SavePreferences($context){			
-			$this->__dump($context);
-		}
 		
 		public function appendPreferences($context){
 			list($hash, $path, $format) = $this->getConfig();
@@ -96,7 +92,7 @@
 			$filename = $this->generateFilename($hash, $format);
 			
 			if(isset($_POST['action']['dump'])){
-				$this->__SavePreferences($context);
+				$this->__dump($context);
 			}
 			
 			$group = new XMLElement('fieldset');
