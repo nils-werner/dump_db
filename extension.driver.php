@@ -66,11 +66,11 @@
 			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
 			
 			$label = new XMLElement('label', NULL);
-			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes', 'checked' => 'checked'));
+			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes'));
 			$label->setValue($checkbox->generate() . ' ' .__('Save author information'));
 			$div->appendChild($label);
 			
-			$div->appendChild(new XMLElement('p', __('Unchecking this box will prevent your dump from dumping any author data.'), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('After checking this box, all authordata will be overwritten if the dump is being restored.'), array('class' => 'help')));	
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));

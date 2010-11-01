@@ -44,8 +44,8 @@
 		'Save author information' =>
 		'Benutzer sichern',
 		
-		'Unchecking this box will prevent your dump from dumping any author data.' =>
-		'Durch abwählen dieses Häkchens hindern Sie die Sicherung daran, Autoren-Daten zu speichern.',
+		'After checking this box, all authordata will be overwritten if the dump is being restored.' =>
+		'Wenn dieses Häkchen aktiviert wird, werden beim Wiedereinspielen der Sicherung sämtliche Benutzerdaten überschrieben',
 		
 		'Do you really want to overwrite your database with the contents from the file?' =>
 		'Wollen Sie wirklich die Datenbank mit dem Inhalt der Datei überschreiben?',
