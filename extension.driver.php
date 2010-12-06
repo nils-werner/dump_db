@@ -119,28 +119,51 @@
 			$dump = new MySQLDump(Symphony::Database());
 			
 			$rows = Symphony::Database()->fetch("SHOW TABLES LIKE 'tbl_%';");
-			
 			$rows = array_map (create_function ('$x', 'return array_values ($x);'), $rows);
 			$tables = array_map (create_function ('$x', 'return $x[0];'), $rows);
 			
-			$users = ($_POST['settings']['dump_db']['users'] == 'yes')? true : false;
+			$data = $authors = FALSE;
+			
+			if(isset($_POST['action']['dump']['authors'])) {
+				$authors = TRUE;
+			}
+			elseif(isset($_POST['action']['dump']['data'])) {
+				$data = TRUE;
+			}
 			
 			foreach ($tables as $table){
 				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
 				
-				if(!$users && ($table == "tbl_authors" || $table == "tbl_forgotpass")) {
-					continue;
+				if($authors) {
+					switch($table) {
+						case 'tbl_authors':
+						case 'tbl_forgotpass':
+							$sql_data .= $dump->export($table, MySQLDump::ALL);
+							break;
+						case 'tbl_sessions':
+							$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);	
+							break;
+						default: // ignore everything but the authors
+							break;
+					}
+				}
+				elseif($data) {
+					switch($table) {
+						case 'tbl_authors': // ignore authors
+						case 'tbl_forgotpass':
+						case 'tbl_sessions':
+							break;
+						case 'tbl_cache':
+							$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);
+							break;
+						default:
+							$sql_data .= $dump->export($table, MySQLDump::ALL);
+					}
 				}
 				
-				if($table == "tbl_cache" || $table == "tbl_sessions") { ## Grab the structure for cache and sessions
-					$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);
-				}
-				else { ## Grab the data for everything else
-					$sql_data .= $dump->export($table, MySQLDump::ALL);
-				}
 			}
 			
-		    if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
+			if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
 				Administration::instance()->Page->pageAlert(__('Database successfully dumped into <code>%s/%s</code>.',array($path,$filename)), Alert::SUCCESS);
 			}
 			else {
