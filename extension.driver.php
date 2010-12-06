@@ -48,7 +48,7 @@
 			if($hash == "")
 				$hash = "<em>" . __("random-hash") . "</em>";
 			
-			$filename = $this->generateFilename($hash, $format, "<em>data|authors</em>");
+			$filename = $this->generateFilename($hash, $format, "(data|authors)");
 			
 			if(isset($_POST['action']['dump'])){
 				$this->__dump($context);
@@ -63,9 +63,7 @@
 			$group->appendChild(new XMLElement('legend', __('Dump Database')));			
 			
 
-			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
-			
-			$div->appendChild(new XMLElement('p', __('After checking this box, all authordata will be overwritten if the dump is being restored.'), array('class' => 'help')));	
+			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));	
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Save Authors'), array('name' => 'action[dump][authors]', 'type' => 'submit')));
@@ -80,7 +78,7 @@
 			}
 			
 
-			$div->appendChild(new XMLElement('p', __('Packages and restores your data into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages and restores your data and authors into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
@@ -92,16 +90,20 @@
 				return;
 			
 			list($hash, $path, $format) = $this->getConfig();
-			$filename = $this->generateFilename($hash, $format);
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqlrestore.php');
 			
 			$restore = new MySQLRestore(Symphony::Database());
 			
+			$mode = NULL;
+			$mode = (isset($_POST['action']['restore']['authors']))? 'authors' : 'data';
+			
+			$filename = $this->generateFilename($hash, $format, $mode);
+			
 			$return = $restore->import(file_get_contents(DOCROOT . $path . '/' . $filename));
 			
-		    if(FALSE !== $return) {
-				Administration::instance()->Page->pageAlert(__('Database successfully restored from <code>%s/%s</code> in %d queries.',array($path,$filename,$return)), Alert::SUCCESS);
+			if(FALSE !== $return) {
+				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$path,$filename,$return)), Alert::SUCCESS);
 			}
 			else {
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
@@ -159,7 +161,7 @@
 			}
 			
 			if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
-				Administration::instance()->Page->pageAlert(__('Database successfully dumped into <code>%s/%s</code>.',array($path,$filename)), Alert::SUCCESS);
+				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$path,$filename)), Alert::SUCCESS);
 			}
 			else {
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
