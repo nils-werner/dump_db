@@ -2,12 +2,12 @@
 
 This extension exports your Symphony database
 
-- Version: 1.05
-- Date: 23nd September 2010
+- Version: 1.06
+- Date: 6th December 2010
 - Requirements: Symphony 2.0.7 or above
 - Author: Nils Werner, nils.werner@gmail.com
-- Constributors: [A list of contributors can be found in the commit history](http://github.com/phoque/dump_db/commits/master)
-- GitHub Repository: <http://github.com/phoque/dump_db>
+- Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
+- GitHub Repository: <http://github.com/nils-werner/dump_db>
 
 ## Synopsis
 
@@ -44,6 +44,10 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 - New function to restore database from dump.
   Be advised that this should never be used in a production environment as the procedure to extract the queries from the dump may be prone to errors.
   To enable this feature you need to activate it manually in your config file.
+  
+**Version 1.06**
+
+- Extension will now dump and restore both data and authors into two seperate files.
 
 ## Config
 
