@@ -97,6 +97,7 @@
 			
 			$mode = NULL;
 			$mode = (isset($_POST['action']['restore']['authors']))? 'authors' : 'data';
+			if($mode == NULL) return;
 			
 			$filename = $this->generateFilename($hash, $format, $mode);
 			
@@ -125,6 +126,7 @@
 			
 			$mode = NULL;
 			$mode = (isset($_POST['action']['dump']['authors']))? 'authors' : 'data';
+			if($mode == NULL) return;
 			
 			$filename = $this->generateFilename($hash, $format, $mode);
 			
