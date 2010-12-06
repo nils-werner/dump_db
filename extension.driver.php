@@ -48,7 +48,7 @@
 			if($hash == "")
 				$hash = "<em>" . __("random-hash") . "</em>";
 			
-			$filename = $this->generateFilename($hash, $format);
+			$filename = $this->generateFilename($hash, $format, "<em>data|authors</em>");
 			
 			if(isset($_POST['action']['dump'])){
 				$this->__dump($context);
@@ -109,10 +109,9 @@
 		}
 		
 		private function __dump($context){
-			$sql_schema = $sql_data = $sql_authors = NULL;
+			$sql_schema = $sql_data = NULL;
 			
 			list($hash, $path, $format) = $this->getConfig();
-			$filename = $this->generateFilename($hash, $format);
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqldump.php');
 			
@@ -122,19 +121,15 @@
 			$rows = array_map (create_function ('$x', 'return array_values ($x);'), $rows);
 			$tables = array_map (create_function ('$x', 'return $x[0];'), $rows);
 			
-			$data = $authors = FALSE;
+			$mode = NULL;
+			$mode = (isset($_POST['action']['dump']['authors']))? 'authors' : 'data';
 			
-			if(isset($_POST['action']['dump']['authors'])) {
-				$authors = TRUE;
-			}
-			elseif(isset($_POST['action']['dump']['data'])) {
-				$data = TRUE;
-			}
+			$filename = $this->generateFilename($hash, $format, $mode);
 			
 			foreach ($tables as $table){
 				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
 				
-				if($authors) {
+				if($mode == 'authors') {
 					switch($table) {
 						case 'tbl_authors':
 						case 'tbl_forgotpass':
@@ -147,7 +142,7 @@
 							break;
 					}
 				}
-				elseif($data) {
+				elseif($mode == 'data') {
 					switch($table) {
 						case 'tbl_authors': // ignore authors
 						case 'tbl_forgotpass':
@@ -178,7 +173,7 @@
 			$format = General::Sanitize(Administration::instance()->Configuration->get('format', 'dump_db'));
 			
 			if($format == "")
-				$format = 'dump-%1$s.sql';
+				$format = '%1$s-%2$s.sql';
 			
 			if($path == "")
 				$path = "/workspace";
@@ -192,7 +187,7 @@
 			return array($hash, $path, $format);
 		}
 		
-		private function generateFilename($hash, $format) {
-			return sprintf($format,$hash,date("YmdHi"));
+		private function generateFilename($hash, $format, $mode) {
+			return sprintf($format,$mode,$hash,date("YmdHi"));
 		}
 	}
