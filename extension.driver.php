@@ -65,22 +65,22 @@
 
 			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
 			
-			$label = new XMLElement('label', NULL);
-			$checkbox = new XMLElement('input', NULL, array('name' => 'settings[dump_db][users]', 'type' => 'checkbox', 'value' => 'yes'));
-			$label->setValue($checkbox->generate() . ' ' .__('Save author information'));
-			$div->appendChild($label);
-			
 			$div->appendChild(new XMLElement('p', __('After checking this box, all authordata will be overwritten if the dump is being restored.'), array('class' => 'help')));	
 			
 			$span = new XMLElement('span');
-			$span->appendChild(new XMLElement('button', __('Dump'), array('name' => 'action[dump]', 'type' => 'submit')));
+			$span->appendChild(new XMLElement('button', __('Save Authors'), array('name' => 'action[dump][authors]', 'type' => 'submit')));
+			$span->appendChild(new XMLElement('button', __('Save Data'), array('name' => 'action[dump][data]', 'type' => 'submit')));
+			$div->appendChild($span);
+			
 			if(Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes') {
-				$span->appendChild(new XMLElement('button', __('Restore'), array('name' => 'action[restore]', 'type' => 'submit')));
+				$span = new XMLElement('span');
+				$span->appendChild(new XMLElement('button', __('Restore Authors'), array('name' => 'action[restore][authors]', 'type' => 'submit')));
+				$span->appendChild(new XMLElement('button', __('Restore Data'), array('name' => 'action[restore][data]', 'type' => 'submit')));
+				$div->appendChild($span);
 			}
 			
-			$div->appendChild($span);
 
-			$div->appendChild(new XMLElement('p', __('Packages and restores your database into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
+			$div->appendChild(new XMLElement('p', __('Packages and restores your data into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
@@ -109,7 +109,7 @@
 		}
 		
 		private function __dump($context){
-			$sql_schema = $sql_data = NULL;
+			$sql_schema = $sql_data = $sql_authors = NULL;
 			
 			list($hash, $path, $format) = $this->getConfig();
 			$filename = $this->generateFilename($hash, $format);
