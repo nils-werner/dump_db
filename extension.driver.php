@@ -50,6 +50,13 @@
 			
 			$filename = $this->generateFilename($hash, $format, "(data|authors)");
 			
+			$filesWriteable = $this->__filesWriteable();
+			
+		    if (!$filesWriteable) {
+		        Administration::instance()->Page->pageAlert(__('One of the target files <code>%s/%s</code> is not writeable. You will not be able to save your database.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
+				);
+		    }
+			
 			if(isset($_POST['action']['dump'])){
 				$this->__dump($context);
 			}
@@ -65,9 +72,11 @@
 
 			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));	
 			
+			$disabled = ($filesWriteable ? array() : array('disabled' => 'disabled'));
+			
 			$span = new XMLElement('span');
-			$span->appendChild(new XMLElement('button', __('Save Authors'), array('name' => 'action[dump][authors]', 'type' => 'submit')));
-			$span->appendChild(new XMLElement('button', __('Save Data'), array('name' => 'action[dump][data]', 'type' => 'submit')));
+			$span->appendChild(new XMLElement('button', __('Save Authors'), array_merge(array('name' => 'action[dump][authors]', 'type' => 'submit'), $disabled)));
+			$span->appendChild(new XMLElement('button', __('Save Data'), array_merge(array('name' => 'action[dump][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
 			if(Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes') {
@@ -83,6 +92,21 @@
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
 						
+		}
+		
+		private function __filesWriteable() {
+			list($hash, $path, $format) = $this->getConfig();
+			
+			return (
+				(
+					!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) ||
+					is_writable(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data"))
+				) &&
+				(
+					!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors")) ||
+					is_writable(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors"))
+				)
+			);
 		}
 		
 		private function __restore($context){
