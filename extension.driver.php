@@ -32,6 +32,25 @@
 					);
 		}
 		
+		public function __construct() {
+			$this->path = General::Sanitize(Administration::instance()->Configuration->get('path', 'dump_db'));
+			$this->hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
+			$this->format = General::Sanitize(Administration::instance()->Configuration->get('format', 'dump_db'));
+			
+			if($this->format == "")
+				$this->format = '%1$s-%2$s.sql';
+			
+			if($this->path == "")
+				$this->path = "/workspace";
+			
+			if($this->hash == "") {
+				$this->hash = md5(microtime());
+				Administration::instance()->Configuration->set('hash', $this->hash ,'dump_db');
+				Administration::instance()->saveConfig();
+			}
+			
+		}
+		
 		public function install(){
 			return true;
 		}
@@ -52,25 +71,28 @@
 			if(!is_null($context['alert'])) return;
 			
 		    if ($this->__filesNewer()) {
-				list($hash, $path, $format) = $this->getConfig();
+				$files = implode(__(" and "), array_map('__',array_map('ucfirst',$this->__filesNewer())));
 			
-				$filename = $this->generateFilename($hash, $format, "(data|authors)");
-			
-		        Administration::instance()->Page->pageAlert(__('One of the database-dump files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
-				);
+		        if(count($this->__filesNewer()) == 1)
+		        	$message = __('The database file for your %s is newer than your last sync. ',array($files));
+		        else
+		        	$message = __('The database files for both your %s is newer than your last sync. ',array($files));
+		        	
+		        	
+		        $message .= __('It\'s recommended to <a href="%s">sync your database now.</a>', array('/symphony/system/preferences/#file-actions'));
+		        
+       			Administration::instance()->Page->pageAlert($message);
 		    }
+		    
+		    
+
 		}
 		
-		public function appendPreferences($context){
-			list($hash, $path, $format) = $this->getConfig();
-			
-			$filename = $this->generateFilename($hash, $format, "(data|authors)");
-			
+		public function appendPreferences($context){		
 			$filesWriteable = $this->__filesWriteable();
 			
 		    if (!$filesWriteable) {
-		        Administration::instance()->Page->pageAlert(__('One of the target files <code>%s/%s</code> is not writeable. You will not be able to save your database.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
-				);
+		        Administration::instance()->Page->pageAlert(__('One of the database-dump files is not writeable. You will not be able to save your database.'), AdministrationPage::PAGE_ALERT_ERROR);
 		    }
 			
 			if(isset($_POST['action']['dump'])){
@@ -103,7 +125,7 @@
 			$div->appendChild($span);
 			
 			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes') {
-				$div->appendChild(new XMLElement('p', __('Restoring needs to be enabled in <code>/manifest/config.php</code>.',array($path, $filename)), array('class' => 'help')));
+				$div->appendChild(new XMLElement('p', __('Restoring needs to be enabled in <code>/manifest/config.php</code>.',array($this->path, $filename)), array('class' => 'help')));
 			}
 
 			$group->appendChild($div);						
@@ -112,42 +134,47 @@
 		}
 		
 		private function __filesWriteable() {
-			list($hash, $path, $format) = $this->getConfig();
+			$return = array();
 			
-			return (
-				(
-					!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) ||
-					is_writable(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data"))
-				) &&
-				(
-					!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors")) ||
-					is_writable(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors"))
-				)
-			);
+			foreach(array("data", "authors") AS $mode) {
+				$filename = DOCROOT . $this->path . '/' . $this->generateFilename($mode);
+				
+				if(!file_exists($filename) || is_writable($filename)) { // file doesn't exist or is writeable
+					$return[] = $mode;
+				}
+			}
+			
+			if($return == array())
+				$return = FALSE;
+			
+			return $return;
 		}
 		
-		private function __filesNewer() {
-			list($hash, $path, $format) = $this->getConfig();
-			
+		private function __filesNewer() {	
+			$return = array();
+					
 			$last_sync = strtotime(Administration::instance()->Configuration->get('last_sync', 'dump_db'));
 			
-			if(!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) || !file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors")))
-				return FALSE;
-						
 			if($last_sync === FALSE)
 				return FALSE;
 			
-			return(
-				$last_sync < filemtime(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) ||
-				$last_sync < filemtime(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors"))
-			);
+			foreach(array("data", "authors") AS $mode) {
+				$filename = DOCROOT . $this->path . '/' . $this->generateFilename($mode);
+				
+				if(file_exists($filename) && $last_sync < filemtime($filename)) { // file exists and is newer than $last_sync
+					$return[] = $mode;
+				}
+			}
+				
+			if($return == array())
+				$return = FALSE;
+
+			return $return;
 		}
 		
 		private function __restore($context){
 			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes')  // make sure the user knows what he's doing
 				return;
-			
-			list($hash, $path, $format) = $this->getConfig();
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqlrestore.php');
 			
@@ -157,24 +184,22 @@
 			$mode = (isset($_POST['action']['restore']['authors']))? 'authors' : 'data';
 			if($mode == NULL) return;
 			
-			$filename = $this->generateFilename($hash, $format, $mode);
+			$filename = $this->generateFilename($mode);
 			
-			$return = $restore->import(file_get_contents(DOCROOT . $path . '/' . $filename));
+			$return = $restore->import(file_get_contents(DOCROOT . $this->path . '/' . $filename));
 			
 			if(FALSE !== $return) {
-				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$path,$filename,$return)), Alert::SUCCESS);
+				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$this->path,$filename,$return)), Alert::SUCCESS);
 				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
 				Administration::instance()->saveConfig();
 			}
 			else {
-				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
+				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);
 			}
 		}
 		
 		private function __dump($context){
 			$sql_schema = $sql_data = NULL;
-			
-			list($hash, $path, $format) = $this->getConfig();
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqldump.php');
 			
@@ -188,7 +213,7 @@
 			$mode = (isset($_POST['action']['dump']['authors']))? 'authors' : 'data';
 			if($mode == NULL) return;
 			
-			$filename = $this->generateFilename($hash, $format, $mode);
+			$filename = $this->generateFilename($mode);
 			
 			foreach ($tables as $table){
 				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
@@ -222,38 +247,18 @@
 				
 			}
 			
-			if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
-				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$path,$filename)), Alert::SUCCESS);
+			if(FALSE !== file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
+				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
 				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
 				Administration::instance()->saveConfig();
 			}
 			else {
-				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
+				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);
 			}
 			
 		}
 		
-		private function getConfig() {
-			$path = General::Sanitize(Administration::instance()->Configuration->get('path', 'dump_db'));
-			$hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
-			$format = General::Sanitize(Administration::instance()->Configuration->get('format', 'dump_db'));
-			
-			if($format == "")
-				$format = '%1$s-%2$s.sql';
-			
-			if($path == "")
-				$path = "/workspace";
-			
-			if($hash == "") {
-				$hash = md5(microtime());
-				Administration::instance()->Configuration->set('hash', $hash ,'dump_db');
-				Administration::instance()->saveConfig();
-			}
-			
-			return array($hash, $path, $format);
-		}
-		
-		private function generateFilename($hash, $format, $mode) {
-			return sprintf($format,$mode,$hash,date("YmdHi"));
+		private function generateFilename($mode) {
+			return sprintf($this->format, $mode, $this->hash,date("YmdHi"));
 		}
 	}

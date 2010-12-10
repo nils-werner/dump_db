@@ -23,6 +23,9 @@
 		
 		'Data' => 
 		'Daten',
+		
+		' and ' =>
+		' als auch ',
 
 		'Save Data' =>
 		'Daten sichern',
@@ -39,10 +42,8 @@
 		'Packages and restores your data and authors into and from <code>%s/%s</code>.' =>
 		'Speichert und stellt ihre Daten und Autoren wieder her in/aus <code>%s/%s</code>.',
 		
-		
 		'An error occurred while trying to write <code>%s/%s</code>.' =>
 		'Ein Fehler ist beim Schreiben von <code>%s/%s</code> aufgetreten.',
-		
 		
 		'%s successfully dumped into <code>%s/%s</code>.' =>
 		'%s wurde erfolgreich in <code>%s/%s</code> gespeichert.',
@@ -59,11 +60,14 @@
 		'An error occurred while trying to import from <code>%s/%s</code>.' =>
 		'Ein Fehler ist bei der Wiederherstellung der Datenbank aus <code>%s/%s</code> aufgetreten.',
 		
-		'One of the target files <code>%s/%s</code> is not writeable. You will not be able to save your database.' =>
-		'Eine der Zieldateien <code>%s/%s</code> ist nicht beschreibbar. Die Datenbank kann nicht gesichert werden.',
+		'The database file for your %s is newer than your last sync. ' =>
+		'Die Datenbank-Sicherungsdatei für die %s wurde seit der letzten Synchronisation geändert. ',
 		
-		'One of the database-dump files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.' =>
-		'Eine der Datenbank-Sicherungsdateien <code>%s/%s</code> ist neuer als die letzte Synchronisation. Es wird empfohlen, die Datenbank nun wiederherzustellen.',
+		'The database files for both your %s is newer than your last sync. ' =>
+		'Die Datenbank-Sicherungsdateien für sowohl %s wurden seit der letzten Synchronisation geändert. ',
+		
+		'It\'s recommended to <a href="%s">sync your database now.</a>' =>
+		'Es wird empfohlen, <a href="%s">die Datenbank nun wiederherzustellen.</a>',
 		
 		'Restoring needs to be enabled in <code>/manifest/config.php</code>.' =>
 		'Wiederherstellung muss in <code>/manifest/config.php</code> aktiviert werden.',
