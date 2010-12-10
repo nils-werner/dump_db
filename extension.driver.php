@@ -79,7 +79,7 @@
 		        	$message = __('The database files for both your %s is newer than your last sync. ',array($files));
 		        	
 		        	
-		        $message .= __('It\'s recommended to <a href="%s">sync your database now.</a>', array(URL . '/symphony/system/preferences/#file-actions'));
+		        $message .= __('It\'s recommended to <a href="%s">sync your database now.</a>', array(URL . '/symphony/system/preferences/#dump-actions'));
 		        
        			Administration::instance()->Page->pageAlert($message);
 		    }
@@ -108,7 +108,7 @@
 			$group->appendChild(new XMLElement('legend', __('Dump Database')));			
 			
 
-			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));	
+			$div = new XMLElement('div', NULL, array('id' => 'dump-actions', 'class' => 'label'));	
 			
 			$disabled = ($filesWriteable ? array() : array('disabled' => 'disabled'));
 			
