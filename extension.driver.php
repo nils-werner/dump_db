@@ -4,8 +4,8 @@
 
 		public function about(){
 			return array('name' => 'Dump DB',
-						 'version' => '1.06',
-						 'release-date' => '2010-12-06',
+						 'version' => '1.07',
+						 'release-date' => '2010-12-10',
 						 'author' => array('name' => 'Nils Werner',
 										   'website' => 'http://www.phoque.de',
 										   'email' => 'nils.werner@gmail.com')
@@ -23,7 +23,12 @@
 							'page'		=> '/backend/',
 							'delegate'	=> 'InitaliseAdminPageHead',
 							'callback'	=> 'initaliseAdminPageHead'
-						)
+						),
+						array(
+							'page' => '/backend/',
+							'delegate' => 'AppendPageAlert',
+							'callback' => 'appendAlert'
+						),
 					);
 		}
 		
@@ -42,11 +47,22 @@
 			$page->addScriptToHead(URL . '/extensions/dump_db/assets/script.js', 3134);
 		}
 		
+		public function appendAlert($context){
+			
+			if(!is_null($context['alert'])) return;
+			
+		    if ($this->__filesNewer()) {
+				list($hash, $path, $format) = $this->getConfig();
+			
+				$filename = $this->generateFilename($hash, $format, "(data|authors)");
+			
+		        Administration::instance()->Page->pageAlert(__('One of the target files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
+				);
+		    }
+		}
+		
 		public function appendPreferences($context){
 			list($hash, $path, $format) = $this->getConfig();
-			
-			if($hash == "")
-				$hash = "<em>" . __("random-hash") . "</em>";
 			
 			$filename = $this->generateFilename($hash, $format, "(data|authors)");
 			
@@ -110,6 +126,23 @@
 			);
 		}
 		
+		private function __filesNewer() {
+			list($hash, $path, $format) = $this->getConfig();
+			
+			$last_sync = strtotime(Administration::instance()->Configuration->get('last_sync', 'dump_db'));
+			
+			if(!file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) || !file_exists(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors")))
+				return FALSE;
+						
+			if($last_sync === FALSE)
+				return FALSE;
+			
+			return(
+				$last_sync < filemtime(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "data")) ||
+				$last_sync < filemtime(DOCROOT . $path . '/' . $this->generateFilename($hash, $format, "authors"))
+			);
+		}
+		
 		private function __restore($context){
 			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes')  // make sure the user knows what he's doing
 				return;
@@ -130,6 +163,8 @@
 			
 			if(FALSE !== $return) {
 				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$path,$filename,$return)), Alert::SUCCESS);
+				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
+				Administration::instance()->saveConfig();
 			}
 			else {
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);
@@ -189,6 +224,8 @@
 			
 			if(FALSE !== file_put_contents(DOCROOT . $path . '/' . $filename, $sql_data)) {
 				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$path,$filename)), Alert::SUCCESS);
+				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
+				Administration::instance()->saveConfig();
 			}
 			else {
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($path,$filename)), Alert::ERROR);

@@ -2,8 +2,8 @@
 
 This extension exports your Symphony database
 
-- Version: 1.06
-- Date: 6th December 2010
+- Version: 1.07
+- Date: 10th December 2010
 - Requirements: Symphony 2.0.7 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
@@ -48,6 +48,11 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 **Version 1.06**
 
 - Extension will now dump and restore both data and authors into two seperate files.
+
+**Version 1.07**
+
+- Extension will now show a notification on every backend page if one of the dump files is newer than your database.
+  Also, it will show a notification and disable the "Dump"-buttons if one of the files isn't writeable.
 
 ## Config
 
