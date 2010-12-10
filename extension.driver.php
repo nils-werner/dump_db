@@ -79,12 +79,13 @@
 			$span->appendChild(new XMLElement('button', __('Save Data'), array_merge(array('name' => 'action[dump][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
-			if(Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes') {
-				$span = new XMLElement('span');
-				$span->appendChild(new XMLElement('button', __('Restore Authors'), array('name' => 'action[restore][authors]', 'type' => 'submit')));
-				$span->appendChild(new XMLElement('button', __('Restore Data'), array('name' => 'action[restore][data]', 'type' => 'submit')));
-				$div->appendChild($span);
-			}
+			
+			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
+			
+			$span = new XMLElement('span');
+			$span->appendChild(new XMLElement('button', __('Restore Authors'), array_merge(array('name' => 'action[restore][authors]', 'type' => 'submit'), $disabled)));
+			$span->appendChild(new XMLElement('button', __('Restore Data'), array_merge(array('name' => 'action[restore][data]', 'type' => 'submit'), $disabled)));
+			$div->appendChild($span);
 			
 
 			$div->appendChild(new XMLElement('p', __('Packages and restores your data and authors into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
