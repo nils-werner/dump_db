@@ -18,6 +18,9 @@
 
 	$dictionary = array(
 	
+		'Dump Database' =>
+		'Datenbank sichern',
+	
 		'Authors' =>
 		'Autoren',
 		
