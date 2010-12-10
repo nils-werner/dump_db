@@ -247,7 +247,7 @@
 				
 			}
 			
-			if(FALSE !== file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
+			if(FALSE !== @file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
 				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
 				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
 				Administration::instance()->saveConfig();
