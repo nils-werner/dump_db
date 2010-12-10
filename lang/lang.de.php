@@ -7,7 +7,7 @@
 			'email' => 'nils.werner@gmail.com',
 			'website' => 'http://www.phoque.de'
 		),
-		'release-date' => '2010-12-06'
+		'release-date' => '2010-12-10'
 	);
 	
 	
@@ -58,6 +58,15 @@
 		
 		'An error occurred while trying to import from <code>%s/%s</code>.' =>
 		'Ein Fehler ist bei der Wiederherstellung der Datenbank aus <code>%s/%s</code> aufgetreten.',
+		
+		'One of the target files <code>%s/%s</code> is not writeable. You will not be able to save your database.' =>
+		'Eine der Zieldateien <code>%s/%s</code> ist nicht beschreibbar. Die Datenbank kann nicht gesichert werden.',
+		
+		'One of the database-dump files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.' =>
+		'Eine der Datenbank-Sicherungsdateien <code>%s/%s</code> ist neuer als die letzte Synchronisation. Es wird empfohlen, die Datenbank nun wiederherzustellen.',
+		
+		'Restoring needs to be enabled in <code>/manifest/config.php</code>.' =>
+		'Wiederherstellung muss in <code>/manifest/config.php</code> aktiviert werden.',
 
 	);
 	

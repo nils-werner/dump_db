@@ -56,7 +56,7 @@
 			
 				$filename = $this->generateFilename($hash, $format, "(data|authors)");
 			
-		        Administration::instance()->Page->pageAlert(__('One of the target files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
+		        Administration::instance()->Page->pageAlert(__('One of the database-dump files <code>%s/%s</code> is newer than your last sync. It\'s recommended to sync your database now.',array($path,$filename)), AdministrationPage::PAGE_ALERT_ERROR
 				);
 		    }
 		}
@@ -95,7 +95,6 @@
 			$span->appendChild(new XMLElement('button', __('Save Data'), array_merge(array('name' => 'action[dump][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
-			
 			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
 			
 			$span = new XMLElement('span');
@@ -103,8 +102,9 @@
 			$span->appendChild(new XMLElement('button', __('Restore Data'), array_merge(array('name' => 'action[restore][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
-
-			$div->appendChild(new XMLElement('p', __('Packages and restores your data and authors into and from <code>%s/%s</code>.',array($path, $filename)), array('class' => 'help')));	
+			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes') {
+				$div->appendChild(new XMLElement('p', __('Restoring needs to be enabled in <code>/manifest/config.php</code>.',array($path, $filename)), array('class' => 'help')));
+			}
 
 			$group->appendChild($div);						
 			$context['wrapper']->appendChild($group);
