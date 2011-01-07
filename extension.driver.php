@@ -247,13 +247,34 @@
 				
 			}
 			
-			if(FALSE !== @file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
-				Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
-				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
-				Administration::instance()->saveConfig();
+			if(Administration::instance()->Configuration->get('dump', 'dump_db') === 'download') {
+				header("Pragma: public");
+				header("Expires: 0");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+				header("Content-Type: application/octet-stream");
+				header("Content-Disposition: attachment; filename=" . $mode . ".sql");
+				echo $sql_data;
+				die();
+			}
+			elseif(Administration::instance()->Configuration->get('dump', 'dump_db') === 'text') {
+				header("Pragma: public");
+				header("Expires: 0");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+				header("Content-Type: text/plain");
+				echo $sql_data;
+				die();
 			}
 			else {
-				Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);
+				if(FALSE !== @file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
+					Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
+					Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
+					Administration::instance()->saveConfig();
+				}
+				else {
+					Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);
+				}
 			}
 			
 		}
