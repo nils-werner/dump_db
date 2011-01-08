@@ -88,10 +88,11 @@
 
 		}
 		
-		public function appendPreferences($context){		
+		public function appendPreferences($context){
+			$downloadMode = $this->__downloadMode();
 			$filesWriteable = $this->__filesWriteable();
 			
-		    if (count($filesWriteable) < 2) {
+		    if (count($filesWriteable) < 2 && !$downloadMode) {
 		        Administration::instance()->Page->pageAlert(__('One of the database-dump files is not writeable. You will not be able to save your database.'), AdministrationPage::PAGE_ALERT_ERROR);
 		    }
 			
@@ -110,7 +111,7 @@
 
 			$div = new XMLElement('div', NULL, array('id' => 'dump-actions', 'class' => 'label'));	
 			
-			$disabled = (count($filesWriteable) < 2 ? array('disabled' => 'disabled') : array());
+			$disabled = (count($filesWriteable) < 2 && !$downloadMode ? array('disabled' => 'disabled') : array());
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Save Authors'), array_merge(array('name' => 'action[dump][authors]', 'type' => 'submit'), $disabled)));
@@ -118,7 +119,7 @@
 			$div->appendChild($span);
 			
 			
-			if(in_array(Administration::instance()->Configuration->get('dump', 'dump_db'), array('text','download')))
+			if($downloadMode)
 				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. You will be able to download the dump without touching the files on your server.',array(Administration::instance()->Configuration->get('dump', 'dump_db'))), array('class' => 'help')));
 			
 			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
@@ -152,6 +153,10 @@
 				$return = NULL;
 			
 			return $return;
+		}
+		
+		private function __downloadMode() {
+			return in_array(Administration::instance()->Configuration->get('dump', 'dump_db'), array('text','download'));
 		}
 		
 		private function __filesNewer() {	
