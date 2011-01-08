@@ -92,8 +92,8 @@
 			$downloadMode = $this->__downloadMode();
 			$filesWriteable = $this->__filesWriteable();
 			
-		    if (count($filesWriteable) < 2 && !$downloadMode) {
-		        Administration::instance()->Page->pageAlert(__('One of the database-dump files is not writeable. You will not be able to save your database.'), AdministrationPage::PAGE_ALERT_ERROR);
+		    if (count($filesWriteable) < 2 && !$downloadMode && !$this->__filesNewer()) {
+		        Administration::instance()->Page->pageAlert(__('At least one of the database-dump files is not writeable. You will not be able to save your database.'), AdministrationPage::PAGE_ALERT_ERROR);
 		    }
 			
 			if(isset($_POST['action']['dump'])){

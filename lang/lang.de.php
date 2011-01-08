@@ -77,6 +77,9 @@
 		
 		'Restoring needs to be enabled in <code>/manifest/config.php</code>.' =>
 		'Wiederherstellung muss in <code>/manifest/config.php</code> aktiviert werden.',
+		
+		'At least one of the database-dump files is not writeable. You will not be able to save your database.' =>
+		'Mindestens eine der Sicherungsdateien nicht nicht beschreibbar. Sie können Ihre Datenbank nicht sichern.',
 
 	);
 	
