@@ -117,6 +117,10 @@
 			$span->appendChild(new XMLElement('button', __('Save Data'), array_merge(array('name' => 'action[dump][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
+			
+			if(in_array(Administration::instance()->Configuration->get('dump', 'dump_db'), array('text','download')))
+				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. You will be able to download the dump without touching the files on your server.',array(Administration::instance()->Configuration->get('dump', 'dump_db'))), array('class' => 'help')));
+			
 			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
 			
 			$span = new XMLElement('span');
