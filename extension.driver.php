@@ -120,7 +120,7 @@
 			
 			
 			if($downloadMode)
-				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. You will be able to download the dump without touching the files on your server.',array(Administration::instance()->Configuration->get('dump', 'dump_db'))), array('class' => 'help')));
+				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. Your dump will be downloaded and won\'t touch local dumps on the server.',array(Administration::instance()->Configuration->get('dump', 'dump_db'))), array('class' => 'help')));
 			
 			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
 			

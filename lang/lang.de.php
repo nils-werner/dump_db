@@ -72,7 +72,7 @@
 		'It\'s recommended to <a href="%s">sync your database now.</a>' =>
 		'Es wird empfohlen, <a href="%s">die Datenbank nun wiederherzustellen.</a>',
 		
-		'Dumping is set to <code>%s</code>. You will be able to download the dump without touching the files on your server.' =>
+		'Dumping is set to <code>%s</code>. Your dump will be downloaded and won\'t touch local dumps on the server.' =>
 		'Sicherung ist auf <code>%s</code> gestellt. Die Sichering wird heruntergeladen ohne dass die Dateien auf ihrem Server verändert werden.',
 		
 		'Restoring needs to be enabled in <code>/manifest/config.php</code>.' =>

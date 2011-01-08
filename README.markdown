@@ -83,3 +83,15 @@ Any mixture of the options above is possible.
 To enable the restore-feature you need to do so manually using the following line in your array:
 
 		'restore' => 'yes'
+
+## Database downloads
+
+In some occasions you don't want DumpDB to save your database into the files on your server (i.e. a server that can only pull from your repositories). For these cases you can provide an option like
+
+		'dump' => 'download'
+
+or
+
+		'dump' => 'text'
+
+This will either force your browser to `download` the dump or display it as `text` in your browser window without touching the files on your server. An additional help-text will be displayed showing that you're in one of these two modes.
