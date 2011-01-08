@@ -91,7 +91,7 @@
 		public function appendPreferences($context){		
 			$filesWriteable = $this->__filesWriteable();
 			
-		    if (!$filesWriteable) {
+		    if (count($filesWriteable) < 2) {
 		        Administration::instance()->Page->pageAlert(__('One of the database-dump files is not writeable. You will not be able to save your database.'), AdministrationPage::PAGE_ALERT_ERROR);
 		    }
 			
@@ -110,7 +110,7 @@
 
 			$div = new XMLElement('div', NULL, array('id' => 'dump-actions', 'class' => 'label'));	
 			
-			$disabled = ($filesWriteable ? array() : array('disabled' => 'disabled'));
+			$disabled = (count($filesWriteable) < 2 ? array('disabled' => 'disabled') : array());
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Save Authors'), array_merge(array('name' => 'action[dump][authors]', 'type' => 'submit'), $disabled)));
@@ -149,7 +149,7 @@
 			}
 			
 			if($return == array())
-				$return = FALSE;
+				$return = NULL;
 			
 			return $return;
 		}
@@ -171,7 +171,7 @@
 			}
 				
 			if($return == array())
-				$return = FALSE;
+				$return = NULL;
 
 			return $return;
 		}
