@@ -262,6 +262,7 @@
 				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
 				header("Content-Type: application/octet-stream");
+				header("Content-Transfer-Encoding: binary");
 				header("Content-Disposition: attachment; filename=" . $mode . ".sql");
 				echo $sql_data;
 				die();
@@ -271,7 +272,7 @@
 				header("Expires: 0");
 				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
-				header("Content-Type: text/plain");
+				header("Content-Type: text/plain; charset=UTF-8");
 				echo $sql_data;
 				die();
 			}
