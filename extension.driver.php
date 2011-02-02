@@ -33,9 +33,9 @@
 		}
 		
 		public function __construct() {
-			$this->path = General::Sanitize(Administration::instance()->Configuration->get('path', 'dump_db'));
-			$this->hash = General::Sanitize(Administration::instance()->Configuration->get('hash', 'dump_db'));
-			$this->format = General::Sanitize(Administration::instance()->Configuration->get('format', 'dump_db'));
+			$this->path = General::Sanitize(Symphony::Configuration()->get('path', 'dump_db'));
+			$this->hash = General::Sanitize(Symphony::Configuration()->get('hash', 'dump_db'));
+			$this->format = General::Sanitize(Symphony::Configuration()->get('format', 'dump_db'));
 			
 			if($this->format == "")
 				$this->format = '%1$s-%2$s.sql';
@@ -45,7 +45,7 @@
 			
 			if($this->hash == "") {
 				$this->hash = md5(microtime());
-				Administration::instance()->Configuration->set('hash', $this->hash ,'dump_db');
+				Symphony::Configuration()->set('hash', $this->hash ,'dump_db');
 				Administration::instance()->saveConfig();
 			}
 			
@@ -56,7 +56,7 @@
 		}
 		
 		public function uninstall(){
-				Administration::instance()->Configuration->remove('dump_db');            
+				Symphony::Configuration()->remove('dump_db');            
 				Administration::instance()->saveConfig();
 		}
 		
@@ -120,16 +120,16 @@
 			
 			
 			if($downloadMode)
-				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. Your dump will be downloaded and won\'t touch local dumps on the server.',array(Administration::instance()->Configuration->get('dump', 'dump_db'))), array('class' => 'help')));
+				$div->appendChild(new XMLElement('p', __('Dumping is set to <code>%s</code>. Your dump will be downloaded and won\'t touch local dumps on the server.',array(Symphony::Configuration()->get('dump', 'dump_db'))), array('class' => 'help')));
 			
-			$disabled = (Administration::instance()->Configuration->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
+			$disabled = (Symphony::Configuration()->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
 			
 			$span = new XMLElement('span');
 			$span->appendChild(new XMLElement('button', __('Restore Authors'), array_merge(array('name' => 'action[restore][authors]', 'type' => 'submit'), $disabled)));
 			$span->appendChild(new XMLElement('button', __('Restore Data'), array_merge(array('name' => 'action[restore][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
 			
-			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes') {
+			if(Symphony::Configuration()->get('restore', 'dump_db') !== 'yes') {
 				$div->appendChild(new XMLElement('p', __('Restoring needs to be enabled in <code>/manifest/config.php</code>.',array($this->path, $filename)), array('class' => 'help')));
 			}
 
@@ -156,13 +156,13 @@
 		}
 		
 		private function __downloadMode() {
-			return in_array(Administration::instance()->Configuration->get('dump', 'dump_db'), array('text','download'));
+			return in_array(Symphony::Configuration()->get('dump', 'dump_db'), array('text','download'));
 		}
 		
 		private function __filesNewer() {	
 			$return = array();
 					
-			$last_sync = strtotime(Administration::instance()->Configuration->get('last_sync', 'dump_db'));
+			$last_sync = strtotime(Symphony::Configuration()->get('last_sync', 'dump_db'));
 			
 			if($last_sync === FALSE)
 				return FALSE;
@@ -182,7 +182,7 @@
 		}
 		
 		private function __restore($context){
-			if(Administration::instance()->Configuration->get('restore', 'dump_db') !== 'yes')  // make sure the user knows what he's doing
+			if(Symphony::Configuration()->get('restore', 'dump_db') !== 'yes')  // make sure the user knows what he's doing
 				return;
 			
 			require_once(dirname(__FILE__) . '/lib/class.mysqlrestore.php');
@@ -199,7 +199,7 @@
 			
 			if(FALSE !== $return) {
 				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$this->path,$filename,$return)), Alert::SUCCESS);
-				Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
+				Symphony::Configuration()->set('last_sync', date('c') ,'dump_db');
 				Administration::instance()->saveConfig();
 			}
 			else {
@@ -225,7 +225,7 @@
 			$filename = $this->generateFilename($mode);
 			
 			foreach ($tables as $table){
-				$table = str_replace(Administration::instance()->Configuration->get('tbl_prefix', 'database'), 'tbl_', $table);
+				$table = str_replace(Symphony::Configuration()->get('tbl_prefix', 'database'), 'tbl_', $table);
 				
 				if($mode == 'authors') {
 					switch($table) {
@@ -256,7 +256,7 @@
 				
 			}
 			
-			if(Administration::instance()->Configuration->get('dump', 'dump_db') === 'download') {
+			if(Symphony::Configuration()->get('dump', 'dump_db') === 'download') {
 				header("Pragma: public");
 				header("Expires: 0");
 				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -267,7 +267,7 @@
 				echo $sql_data;
 				die();
 			}
-			elseif(Administration::instance()->Configuration->get('dump', 'dump_db') === 'text') {
+			elseif(Symphony::Configuration()->get('dump', 'dump_db') === 'text') {
 				header("Pragma: public");
 				header("Expires: 0");
 				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -279,7 +279,7 @@
 			else {
 				if(FALSE !== @file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
 					Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
-					Administration::instance()->Configuration->set('last_sync', date('c') ,'dump_db');
+					Symphony::Configuration()->set('last_sync', date('c') ,'dump_db');
 					Administration::instance()->saveConfig();
 				}
 				else {
