@@ -2,9 +2,9 @@
 
 This extension exports your Symphony database
 
-- Version: 1.07
-- Date: 10th December 2010
-- Requirements: Symphony 2.0.7 or above
+- Version: 1.08
+- Date: 2nd February 2011
+- Requirements: Symphony 2.2 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
 - GitHub Repository: <http://github.com/nils-werner/dump_db>
@@ -53,28 +53,33 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 
 - Extension will now show a notification on every backend page if one of the dump files is newer than your database.
   Also, it will show a notification and disable the "Dump"-buttons if one of the files isn't writeable.
+  
+**Version 1.08**
+
+- Symphony 2.2 compatibility.
+  Removed hash and date from filename. Hash isn't needed as .sql files are now protected by .htaccess and date can be injected in the filename without the 
+  need for sprintf.
 
 ## Config
 
 Path lets you define a destination other than `/workspace`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.
   
-Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the mode (authors/data) `%2$s` is the placeholder for the hash, `%3$s` the placeholder for the timestamp. You will see the final filename before running the dump in the backend.
+Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the mode (authors/data). You can use any other PHP function as long as you don't interfere with sprintf's formatting rules (i.e. `'%1$s-'.date('Ymd').'.sql'` can be used).
   
-The default path is `/workspace`, the default format is `%1$s-%2$s.sql`
+The default path is `/workspace`, the default format is `%1$s.sql`
   
 For example (this will place the file outside your installation-directory):
   
 		###### DUMP_DB ######
 		'dump_db' => array(
 			'hash' => '9081f7300b82a135e0c5efa21b00cf1c',
-			'format' => '%1$s-%2$s.sql',
+			'format' => '%1$s.sql',
 			'path' => '/../sql'
 		),
 		########
 		
 These config-parameters enable you to:
   
- - Share the hash with your collaborators. That way everybody will commit to the same file.
  - Append a timestamp to your filenames. That way you will be able to go back to older versions of the database.
  - Move the file outside your publicly accessible directories.
   
