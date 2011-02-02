@@ -105,7 +105,7 @@
 			
 			$disabled = (count($filesWriteable) < 2 && !$downloadMode ? array('disabled' => 'disabled') : array());
 			
-			$span = new XMLElement('span');
+			$span = new XMLElement('span', NULL, array('class' => 'frame'));
 			$span->appendChild(new XMLElement('button', __('Save Authors'), array_merge(array('name' => 'action[dump][authors]', 'type' => 'submit'), $disabled)));
 			$span->appendChild(new XMLElement('button', __('Save Data'), array_merge(array('name' => 'action[dump][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
@@ -116,7 +116,7 @@
 			
 			$disabled = (Symphony::Configuration()->get('restore', 'dump_db') === 'yes' ? array() : array('disabled' => 'disabled'));
 			
-			$span = new XMLElement('span');
+			$span = new XMLElement('span', NULL, array('class' => 'frame'));
 			$span->appendChild(new XMLElement('button', __('Restore Authors'), array_merge(array('name' => 'action[restore][authors]', 'type' => 'submit'), $disabled)));
 			$span->appendChild(new XMLElement('button', __('Restore Data'), array_merge(array('name' => 'action[restore][data]', 'type' => 'submit'), $disabled)));
 			$div->appendChild($span);
