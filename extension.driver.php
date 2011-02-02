@@ -34,21 +34,13 @@
 		
 		public function __construct() {
 			$this->path = General::Sanitize(Symphony::Configuration()->get('path', 'dump_db'));
-			$this->hash = General::Sanitize(Symphony::Configuration()->get('hash', 'dump_db'));
 			$this->format = General::Sanitize(Symphony::Configuration()->get('format', 'dump_db'));
 			
 			if($this->format == "")
-				$this->format = '%1$s-%2$s.sql';
+				$this->format = '%1$s.sql';
 			
 			if($this->path == "")
 				$this->path = "/workspace";
-			
-			if($this->hash == "") {
-				$this->hash = md5(microtime());
-				Symphony::Configuration()->set('hash', $this->hash ,'dump_db');
-				Administration::instance()->saveConfig();
-			}
-			
 		}
 		
 		public function install(){
@@ -290,6 +282,6 @@
 		}
 		
 		private function generateFilename($mode) {
-			return sprintf($this->format, $mode, $this->hash,date("YmdHi"));
+			return sprintf($this->format, $mode);
 		}
 	}
