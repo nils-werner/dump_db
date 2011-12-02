@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="dump_db">
+	<name>Dump DB</name>
+	<description>Dump your database into a single SQL-file</description>
+	<repo type="github">https://github.com/nils-werner/dump_db</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/40987/</url>
+	<types>
+		<type>Workflow</type>
+	</types>
+	<authors>
+		<author>
+			<name github="nils-werner" symphony="phoque">Nils Werner</name>
+			<website>http://www.phoque.de/</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="1.08" date="2011-03-04" min="2.0.7" />
+	</releases>
+</extension>
