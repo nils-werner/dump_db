@@ -4,6 +4,7 @@
 	<description>Dump your database into a single SQL-file</description>
 	<repo type="github">https://github.com/nils-werner/dump_db</repo>
 	<url type="discuss">http://symphony-cms.com/discuss/thread/40987/</url>
+	<url type="issues">https://github.com/nils-werner/dump_db/issues</url>
 	<types>
 		<type>Workflow</type>
 	</types>
@@ -14,6 +15,14 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="1.08" date="2011-03-04" min="2.0.7" />
+		<release version="1.08" date="2011-02-02" min="2.2" />
+		<release version="1.07" date="2010-12-10" min="2.0.7" />
+		<release version="1.06" date="2010-12-26" min="2.0.7" />
+		<release version="1.05" date="2010-10-26" min="2.0.7" />
+		<release version="1.04" date="2010-09-23" min="2.0.7" />
+		<release version="1.03" date="2010-08-22" min="2.0.7" />
+		<release version="1.02" date="2010-03-15" min="2.0.7" />
+		<release version="1.01" date="2010-03-13" min="2.0.7" />
+		<release version="1.00" date="2010-03-13" min="2.0.7" />
 	</releases>
 </extension>
