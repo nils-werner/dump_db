@@ -4,8 +4,8 @@
 
 		public function about(){
 			return array('name' => 'Dump DB',
-						 'version' => '1.08',
-						 'release-date' => '2011-02-02',
+						 'version' => '1.09',
+						 'release-date' => '2011-12-13',
 						 'author' => array('name' => 'Nils Werner',
 										   'website' => 'http://www.phoque.de',
 										   'email' => 'nils.werner@gmail.com')
@@ -239,6 +239,10 @@
 						case 'tbl_sessions':
 							break;
 						case 'tbl_cache':
+						case 'tbl_search_index':
+						case 'tbl_search_index_entry_keywords':
+						case 'tbl_search_index_keywords':
+						case 'tbl_search_index_logs':
 							$sql_data .= $dump->export($table, MySQLDump::STRUCTURE_ONLY);
 							break;
 						default:
