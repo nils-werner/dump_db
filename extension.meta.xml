@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="dump_db">
+<extension id="dump_db" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Dump DB</name>
 	<description>Dump your database into a single SQL-file</description>
 	<repo type="github">https://github.com/nils-werner/dump_db</repo>
