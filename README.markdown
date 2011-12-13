@@ -2,8 +2,8 @@
 
 This extension exports your Symphony database
 
-- Version: 1.08
-- Date: 2nd February 2011
+- Version: 1.09
+- Date: 13rd December 2011
 - Requirements: Symphony 2.2 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
@@ -16,49 +16,6 @@ This extension will create a downloadable copy of your Symphony CMS database. Pl
 ## Installation & Updating
 
 Information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>.
-
-## Change Log
-
-**Version 1.00**
-
-- Initial release. Mainly a copy of Alistairs Export Ensemble.
-
-**Version 1.01**
-
-- Prevented dumping data of `cache` and `sessions` tables.
-
-**Version 1.02**
-
-- Dump is now being saved into /workspace/dump.sql instead of offered for download.
-
-**Version 1.03**
-
-- Dump-file will now have a random hash in its filename for security reasons.
-
-**Version 1.04**
-
-- New Config parameters `path` and `format`.
-
-**Version 1.05**
-
-- New function to restore database from dump.
-  Be advised that this should never be used in a production environment as the procedure to extract the queries from the dump may be prone to errors.
-  To enable this feature you need to activate it manually in your config file.
-  
-**Version 1.06**
-
-- Extension will now dump and restore both data and authors into two seperate files.
-
-**Version 1.07**
-
-- Extension will now show a notification on every backend page if one of the dump files is newer than your database.
-  Also, it will show a notification and disable the "Dump"-buttons if one of the files isn't writeable.
-  
-**Version 1.08**
-
-- Symphony 2.2 compatibility.
-  Removed hash and date from filename. Hash isn't needed as .sql files are now protected by .htaccess and date can be injected in the filename without the 
-  need for sprintf.
 
 ## Config
 
