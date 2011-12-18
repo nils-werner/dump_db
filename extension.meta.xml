@@ -48,7 +48,7 @@
 		<release version="1.01" date="2010-03-13" min="2.0.7">
 			Prevented dumping data of `cache` and `sessions` tables.
 		</release>
-		<release version="1.00" date="2010-03-13" min="2.0.7" />
+		<release version="1.00" date="2010-03-13" min="2.0.7">
 			Initial release. Mainly a copy of Alistairs Export Ensemble.
 		</release>
 	</releases>
