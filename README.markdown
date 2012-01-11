@@ -29,7 +29,6 @@ For example (this will place the file outside your installation-directory):
   
 		###### DUMP_DB ######
 		'dump_db' => array(
-			'hash' => '9081f7300b82a135e0c5efa21b00cf1c',
 			'format' => '%1$s.sql',
 			'path' => '/../sql'
 		),
