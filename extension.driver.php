@@ -53,9 +53,7 @@
 		}
 		
 		public function initaliseAdminPageHead($context) {
-			$page = $context['parent']->Page;
-			
-			$page->addScriptToHead(URL . '/extensions/dump_db/assets/dump_db.preferences.js', 3134);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/dump_db/assets/dump_db.preferences.js', 3134);
 		}
 		
 		public function appendAlert($context){
