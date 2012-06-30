@@ -2,16 +2,6 @@
 
 	Class extension_dump_db extends Extension{
 
-		public function about(){
-			return array('name' => 'Dump DB',
-						 'version' => '1.09',
-						 'release-date' => '2011-12-13',
-						 'author' => array('name' => 'Nils Werner',
-										   'website' => 'http://www.phoque.de',
-										   'email' => 'nils.werner@gmail.com')
-				 		);
-		}
-		
 		public function getSubscribedDelegates(){
 			return array(
 						array(
