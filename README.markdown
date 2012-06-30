@@ -2,9 +2,9 @@
 
 This extension exports your Symphony database
 
-- Version: 1.09
-- Date: 13rd December 2011
-- Requirements: Symphony 2.2 or above
+- Version: 1.10
+- Date: 30th June 2012
+- Requirements: Symphony 2.3 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
 - GitHub Repository: <http://github.com/nils-werner/dump_db>
