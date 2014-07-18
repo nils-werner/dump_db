@@ -2,9 +2,9 @@
 
 This extension exports your Symphony database
 
-- Version: 1.10
-- Date: 30th June 2012
-- Requirements: Symphony 2.3 or above
+- Version: 1.11
+- Date: 18th July 2014
+- Requirements: Symphony 2.4 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)
 - GitHub Repository: <http://github.com/nils-werner/dump_db>
@@ -20,25 +20,25 @@ Information about [installing and updating extensions](http://symphony-cms.com/l
 ## Config
 
 Path lets you define a destination other than `/workspace`, i.e. outside your publicly accessible directories. Please make sure that destination is writeable by PHP. The path is relative to the constant `DOCROOT`, it must begin with a slash and must not end with one.
-  
+
 Format lets you define a custom file naming scheme. `%1$s` is the placeholder for the mode (authors/data). You can use any other PHP function as long as you don't interfere with sprintf's formatting rules (i.e. `'%1$s-'.date('Ymd').'.sql'` can be used).
-  
+
 The default path is `/workspace`, the default format is `%1$s.sql`
-  
+
 For example (this will place the file outside your installation-directory):
-  
+
 		###### DUMP_DB ######
 		'dump_db' => array(
 			'format' => '%1$s.sql',
 			'path' => '/../sql'
 		),
 		########
-		
+
 These config-parameters enable you to:
-  
+
  - Append a timestamp to your filenames. That way you will be able to go back to older versions of the database.
  - Move the file outside your publicly accessible directories.
-  
+
 Any mixture of the options above is possible.
 
 To enable the restore-feature you need to do so manually using the following line in your array:
