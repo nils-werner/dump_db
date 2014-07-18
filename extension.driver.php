@@ -264,7 +264,7 @@
 				if(FALSE !== @file_put_contents(DOCROOT . $this->path . '/' . $filename, $sql_data)) {
 					Administration::instance()->Page->pageAlert(__('%s successfully dumped into <code>%s/%s</code>.',array(__(ucfirst($mode)),$this->path,$filename)), Alert::SUCCESS);
 					Symphony::Configuration()->set('last_sync', date('c') ,'dump_db');
-					Administration::instance()->saveConfig();
+					Symphony::Configuration()->write();
 				}
 				else {
 					Administration::instance()->Page->pageAlert(__('An error occurred while trying to write <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);
