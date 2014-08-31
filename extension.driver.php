@@ -50,7 +50,7 @@
 			
 			if(!is_null($context['alert'])) return;
 			
-		    if ($this->__filesNewer()) {
+		    if ($this->__filesNewer()) && Administration::instance()->Author->isDeveloper() {
 				$files = implode(__(" and "), array_map('__',array_map('ucfirst',$this->__filesNewer())));
 			
 		        if(count($this->__filesNewer()) == 1)
