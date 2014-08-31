@@ -39,7 +39,7 @@
 		
 		public function uninstall(){
 				Symphony::Configuration()->remove('dump_db');            
-				Administration::instance()->saveConfig();
+				Symphony::Configuration()->write();
 		}
 		
 		public function initaliseAdminPageHead($context) {
@@ -180,7 +180,7 @@
 			if(FALSE !== $return) {
 				Administration::instance()->Page->pageAlert(__('%s successfully restored from <code>%s/%s</code> in %d queries.',array(__(ucfirst($mode)),$this->path,$filename,$return)), Alert::SUCCESS);
 				Symphony::Configuration()->set('last_sync', date('c') ,'dump_db');
-				Administration::instance()->saveConfig();
+				Symphony::Configuration()->write();
 			}
 			else {
 				Administration::instance()->Page->pageAlert(__('An error occurred while trying to import from <code>%s/%s</code>.',array($this->path,$filename)), Alert::ERROR);

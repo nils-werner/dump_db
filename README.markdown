@@ -2,8 +2,8 @@
 
 This extension exports your Symphony database
 
-- Version: 1.11
-- Date: 18th July 2014
+- Version: 1.11.1
+- Date: 31st August 2014
 - Requirements: Symphony 2.4 or above
 - Author: Nils Werner, nils.werner@gmail.com
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nils-werner/dump_db/commits/master)

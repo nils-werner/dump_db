@@ -15,6 +15,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.11.1" date="2014-08-31" min="2.4">
+			- Fixed minor oversights in 2.4 compatibility.
+		</release>
 		<release version="1.11" date="2014-06-22" min="2.4">
 			- Symphony 2.4 compatibility
 		</release>
