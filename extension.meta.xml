@@ -15,6 +15,10 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.11.2" date="2014-10-15" min="2.4">
+			- Fixed syntax errors that rendered extension unusable.
+			- Fixed `mysql_real_escape_string` issue.
+		</release>
 		<release version="1.11.1" date="2014-08-31" min="2.4">
 			- Fixed minor oversights in 2.4 compatibility.
 			- Added Italian and Romanian translation

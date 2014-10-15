@@ -76,7 +76,7 @@
 					}
 					
 					else{
-						$fieldValues[] = "'" . mysql_real_escape_string ($fieldValue) . "'";
+						$fieldValues[] = "'" . $this->_connection->cleanValue($fieldValue) . "'";
 					}
 				}
 
