@@ -50,7 +50,14 @@
 
 			if(!is_null($context['alert'])) return;
 
-			if ($this->__filesNewer() && Administration::instance()->Author->isDeveloper()) {
+			# Handling Sym 2.4 -> 2.5 transition of accessing author object
+			if (is_callable(array('Symphony', 'Author'))) {
+				$author = Symphony::Author();
+			} else {
+				$author = Administration::instance()->Author;
+			}
+
+			if ($this->__filesNewer() && $author->isDeveloper()) {
 				$files = implode(__(" and "), array_map('__',array_map('ucfirst',$this->__filesNewer())));
 
 				if(count($this->__filesNewer()) == 1)
