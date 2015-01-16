@@ -2,7 +2,7 @@
 
 This extension exports your Symphony database
 
-- Version: 1.11.2
+- Version: 1.12
 - Date: 15th October 2014
 - Requirements: Symphony 2.4 or above
 - Author: Nils Werner, nils.werner@gmail.com

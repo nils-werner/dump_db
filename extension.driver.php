@@ -50,7 +50,14 @@
 			
 			if(!is_null($context['alert'])) return;
 			
-		    if ($this->__filesNewer() && Administration::instance()->Author->isDeveloper()) {
+			// https://github.com/symphonycms/symphony-2/wiki/Migration-Guide-to-2.5-for-Developers#properties
+			if (is_callable(array('Symphony', 'Author'))) {
+				$author = Symphony::Author();
+			} else {
+				$author = Administration::instance()->Author;
+			}
+
+			if ($this->__filesNewer() && ($author instanceof Author && $author->isDeveloper()) ? true : false) {
 				$files = implode(__(" and "), array_map('__',array_map('ucfirst',$this->__filesNewer())));
 			
 		        if(count($this->__filesNewer()) == 1)

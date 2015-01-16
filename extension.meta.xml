@@ -15,6 +15,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.12" date="2015-01-16" min="2.4">
+			- Symphony 2.5 compatibility
+		</release>
 		<release version="1.11.2" date="2014-10-15" min="2.4">
 			- Fixed syntax errors that rendered extension unusable.
 			- Fixed `mysql_real_escape_string` issue.
